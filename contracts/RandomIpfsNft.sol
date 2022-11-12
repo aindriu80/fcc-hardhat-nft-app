@@ -6,7 +6,7 @@ import '@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol';
 import '@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol';
 import '@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol';
 
-error RandomIpfsNFT__RangeOutOfBounds;
+error RandomIpfsNFT__RangeOutOfBounds();
 
 contract RandomIpfsNft is VRFConsumerBaseV2, ERC721URIStorage {
     // When we mint an NFT, we will trigger a Chainlink VRF call to get us a random number
@@ -52,6 +52,7 @@ contract RandomIpfsNft is VRFConsumerBaseV2, ERC721URIStorage {
         i_subscriptionId = subscriptionId;
         i_gasLane = gasLane;
         i_callbackGasLimit = callbackGasLimit;
+        s_dogTokenUris = dogTokenUris;
     }
 
     function requestNft() public returns (uint256 requestId) {
@@ -69,16 +70,16 @@ contract RandomIpfsNft is VRFConsumerBaseV2, ERC721URIStorage {
         address dogOwner = s_requestIdToSender[requestId];
         uint256 newTokenId = s_tokenCounter;
         // What does this token look like?
-        uint256 moddedRny = randomWords[0] % MAX_CHANCE_VALUE;
+        uint256 moddedRng = randomWords[0] % MAX_CHANCE_VALUE;
         // 0 - 99
         // 7 -> PUG
         // 88 -> St. Bernard
         // 45 -> St. Bernard
         // 12 -> Shiba Inu 
 
-        Breed dogBreed = getBreedFromModdeRng(moddedRng); 
+        Breed dogBreed = getBreedFromModdedRng(moddedRng); 
         _safeMint(dogOwner, newTokenId);
-        _setToken(newTokenId,s_dogTokenUris[uint256(dogBreed)]);
+        _setTokenURI(newTokenId,s_dogTokenUris[uint256(dogBreed)]);
     }
 
     function getBreedFromModdedRng(uint256 moddedRng) public pure returns(Breed){
