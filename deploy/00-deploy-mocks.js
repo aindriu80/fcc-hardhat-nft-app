@@ -9,7 +9,12 @@ module.exports = async function ({ getNamedAccount, deployments }) {
   const args = [BASE_FEE, GAS_PRICE_LINK]
 
   if (developmentChains.includes(network.name)) {
-    log('local network detected! Deploying mocks...')
+    console.clear()
+    console.log(
+      '%c Local Network detected ',
+      'color: white; background-color: #61dbfb',
+      'Deploying Mocks....'
+    )
     //  deploy a mock vrfcoordinator...
     await deploy('VRFCoordinatorV2Mock', {
       from: deployer,

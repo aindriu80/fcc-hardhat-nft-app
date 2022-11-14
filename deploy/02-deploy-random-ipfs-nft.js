@@ -1,9 +1,16 @@
 const { network } = require('hardhat')
 const { networkConfig, developmentChains } = require('../helper-hardhat-config')
 const { verify } = require('../utils/verify')
-const { storeImages } = require('../utils/uploadToPinata')
+const { storeImages, storeTokenUriMetadata } = require('../utils/uploadToPinata')
 
 const imagesLocation = './images/randomNft'
+
+const metadataTemplate = {
+  name: '',
+  description: '',
+  image: '',
+  attributes: [{ trait_type: 'Cuteness', value: 100 }],
+}
 
 module.exports = async function ({ getNamedAccounts, deployments }) {
   const { deploy, log } = deployments
@@ -32,7 +39,6 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
     subscriptionId = networkConfig[chainId].subscriptionId
   }
   log('------------------------------------------------------------------')
-  await storeImages(imagesLocation)
 
   //   const args = [
   //     vrfCoordinatorV2Address,
@@ -49,7 +55,27 @@ async function handleTokenUris() {
   tokenUris = []
   // Store the image in IPFS
   // Store the metadata in IPFS
-
+  const { responses: imageUploadResponses, files } = await storeImages(imagesLocation)
+  for (imageUploadResponseIndex in imageUploadResponses) {
+    // create metadata
+    // upload the metadata
+    let tokenUriMetadata = { ...metadataTemplate }
+    // pug.png, st-bernard.png
+    tokenUriMetadata.name = files[imageUploadResponseIndex].replace('.png', '')
+    tokenUriMetadata.description = `An adorable ${tokenUriMetadata.name} pup!`
+    tokenUriMetadata.image = `ipfs://${imageUploadResponses[imageUploadResponseIndex].IpfsHash}`
+    console.log(
+      '%c Uploading ',
+      'color: white; background-color: #61dbfb',
+      `${tokenUriMetadata.name}..`
+    )
+    console.log(`Uploading ${tokenUriMetadata.name}...`)
+    // store the JSON to pinata
+    const metadataUploadResponse = await storeTokenUriMetadata(tokenUriMetadata)
+    tokenUris.push(`ipfs://${metadataUploadResponse.IpfsHash}`)
+  }
+  console.log('%c Token URIs Uploaded', 'color: white; background-color: #61dbfb', 'they are ')
+  console.log(tokenUris)
   return tokenUris
 }
 
