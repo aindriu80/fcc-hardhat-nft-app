@@ -10,6 +10,7 @@ const networkConfig = {
     keepersUpdateInterval: '30',
     raffleEntranceFee: '100000000000000000', // 0.1 ETH
     callbackGasLimit: '500000', // 500,000 gas
+    mintFee: '100000000000000000000', //0.01
   },
   5: {
     name: 'goerli',
@@ -19,6 +20,7 @@ const networkConfig = {
     raffleEntranceFee: '100000000000000000', // 0.1 ETH
     callbackGasLimit: '500000', // 500,000 gas
     vrfCoordinatorV2: '0x2ca8e0c643bde4c2e08ab1fa0da3401adad7734d',
+    mintFee: '100000000000000000000', //0.01
   },
   1: {
     name: 'mainnet',

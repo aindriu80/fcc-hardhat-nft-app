@@ -38,17 +38,28 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
     vrfCoordinatorV2Address = networkConfig[chainId].vrfCoordinatorV2
     subscriptionId = networkConfig[chainId].subscriptionId
   }
-  log('------------------------------------------------------------------')
+  log('------------------------------------------------------------------>')
 
-  //   const args = [
-  //     vrfCoordinatorV2Address,
-  //     subscriptionId,
-  //     networkConfig[chainId].gasLane,
-  //     networkConfig[chainId].mintFee,
-  //     networkConfig[chainId].callbackGasLimit,
-  //     // tokenUris,
-  //     networkConfig[chainId].mintFee,
-  //   ]
+  arguments = [
+    vrfCoordinatorV2Address,
+    subscriptionId,
+    networkConfig[chainId]['gasLane'],
+    networkConfig[chainId]['mintFee'],
+    networkConfig[chainId]['callbackGasLimit'],
+    tokenUris,
+  ]
+  const randomIpfsNft = await deploy('RandomIpfsNft', {
+    from: deployer,
+    args: arguments,
+    log: true,
+    waitConfirmations: network.config.blockConfirmations || 1,
+  })
+    log('------------------------------------------------------------------')
+
+    if (!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
+      log('Verifying.....')
+      await verify(randomIpfsNft.address, arguments)
+    }
 }
 
 async function handleTokenUris() {
