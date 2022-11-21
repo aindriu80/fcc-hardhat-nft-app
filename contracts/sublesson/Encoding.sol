@@ -59,8 +59,8 @@ contract Encoding{
     // How do we populate the data field?
 
     function withdraw(address recentWinner) public{
-        (bool success, ) = recentWinner.call{value: address(this).balance)("")};
-        require success, "Transfer Failed");
+        (bool success, ) = recentWinner.call{value: address(this).balance}("");
+        require (success, "Transfer Failed");
     }
 
 
