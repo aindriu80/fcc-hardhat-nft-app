@@ -21,10 +21,10 @@ module.exports = async function ({ getNamedAccount, deployments }) {
   }
   console.log("-----------------------------------------------------------------------")
 
-  const lowSVG = await fs.readFileSync("../images/dynamicNft/frown.svg", { encoding: "utf8" })
-  const highSVG = await fs.readFileSync("../images/dynamicNft/happy.svg", { encoding: "utf8" })
+  const lowSVG = await fs.readFileSync("./images/dynamicNft/frown.svg", { encoding: "utf8" })
+  const highSVG = await fs.readFileSync("./images/dynamicNft/happy.svg", { encoding: "utf8" })
   args = [ethUsdPriceAddress, lowSVG, highSVG]
-  const dynamicSvgNft = await deploy("DynamicSvgNFT", {
+  const dynamicSvgNft = await deploy("DynamicSvgNft", {
     from: deployer,
     args: args,
     log: true,
