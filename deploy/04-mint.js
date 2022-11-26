@@ -5,10 +5,10 @@ module.exports = async function ({ getNamedAccounts }) {
   const { deployer } = await getNamedAccounts()
 
   // Basic NFT
-  const basicNFT = await ethers.getContract("BasicNFT", deployer)
-  const basicMintTx = await basicNFT.mintNft()
+  const basicNft = await ethers.getContract("BasicNft", deployer)
+  const basicMintTx = await basicNft.mintNft()
   await basicMintTx.wait(1)
-  console.log(`Basic NFT index 0 has tokenURI:  ${await basicNFT.tokenURI(0)}`)
+  console.log(`Basic NFT index 0 tokenURI: ${await basicNft.tokenURI(0)}`)
 
   // Random IPPS NFT
   const randomIpfsNft = await ethers.getContract("RandomIpfsNft", deployer)
@@ -31,8 +31,10 @@ module.exports = async function ({ getNamedAccounts }) {
 
   // Dynamci SVG NFT
   const highValue = ethers.utils.parseEther("4000")
-  const dynamicSvgNft = await ethers.getContract("DynamicSVGNFT", deployer)
+  const dynamicSvgNft = await ethers.getContract("DynamicSvgNft", deployer)
   const dynamicSvgNftMintTx = await dynamicSvgNft.mintNft(highValue.toString())
   await dynamicSvgNftMintTx.wait(1)
-  console.log(`Dynamic SVG NFT index 0 tokenURI: ${await dynamicSvgNft.token(0)}`)
+  console.log(`Dynamic SVG NFT index 0 tokenURI: ${await dynamicSvgNft.tokenURI(0)}`)
 }
+
+module.exports.tags = ["all", "mint"]
